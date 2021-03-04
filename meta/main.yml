@@ -1,0 +1,21 @@
+---
+dependencies: []
+
+galaxy_info:
+  author: binbash_inc
+  description: Initialise HashiCorp Vault.
+  company: "Binbashar Inc."
+  license: "license (BSD, MIT)"
+  min_ansible_version: 2.9
+  platforms:
+    - name: Debian
+      versions:
+        - jessie
+        - stretch
+    - name: Ubuntu
+      versions:
+        - xenial
+        - bionic
+  galaxy_tags:
+    - system
+    - files
