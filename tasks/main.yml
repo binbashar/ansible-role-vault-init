@@ -1,0 +1,32 @@
+---
+- name: Check if Vault is initialized
+  environment:
+    VAULT_ADDR: '{{ vault_address }}'
+  shell: 'vault status -format=json'
+  ignore_errors: yes
+  become: no
+  register: vault_status_result
+
+- name: Parse output as JSON
+  set_fact:
+    vault_status_result_json: '{{ vault_status_result.stdout | from_json }}'
+
+- name: Initialize Vault
+  environment:
+    VAULT_ADDR: '{{ vault_address }}'
+  command: 'vault operator init -format=json'
+  become: no
+  when: not vault_status_result_json.initialized | bool
+  register: vault_init_result
+
+- name: Parse output as JSON
+  when: not vault_status_result_json.initialized | bool
+  set_fact:
+    vault_init_output: "{{ vault_init_result.stdout | from_json }}"
+
+- debug: msg="{{ vault_init_output }}"
+  when: not vault_status_result_json.initialized | bool
+
+- name: Clear previous output
+  set_fact:
+    vault_init_output: ''
